@@ -1,7 +1,12 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using A1.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<A1Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("A1Context") ?? throw new InvalidOperationException("Connection string 'A1Context' not found.")));
 
 var app = builder.Build();
 
