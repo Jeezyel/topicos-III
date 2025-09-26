@@ -15,5 +15,9 @@ namespace A1.Data
         }
 
         public DbSet<A1.Models.Usuario> Usuario { get; set; } = default!;
+        public DbSet<Endereco> Endereco { get; set; } = default!;
+        public DbSet<Reserva> Reserva { get; set; } = default!;
+        public DbSet<ItemCardapio> ItemCardapio { get; set; } = default!;
+        public DbSet<Ingrediente> Ingrediente { get; set; } = default!;
     }
 }

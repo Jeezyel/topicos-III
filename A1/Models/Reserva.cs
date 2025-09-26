@@ -3,6 +3,7 @@
     public class Reserva
     {
         public int Id { get; set; }
+        public int UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
         public DateTime HorarioReserva { get; set; }
         public string Mesa { get; set; }

@@ -1,0 +1,49 @@
+﻿@page
+@model A1.Pages.Cardapio.CreateModel
+@{
+    ViewData["Title"] = "Criar item";
+}
+
+<h1>Criar novo item</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ItemCardapio.Nome" class="control-label"></label>
+                <input asp-for="ItemCardapio.Nome" class="form-control" />
+                <span asp-validation-for="ItemCardapio.Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemCardapio.Descricao" class="control-label"></label>
+                <input asp-for="ItemCardapio.Descricao" class="form-control" />
+                <span asp-validation-for="ItemCardapio.Descricao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemCardapio.PrecoBase" class="control-label"></label>
+                <input asp-for="ItemCardapio.PrecoBase" class="form-control" />
+                <span asp-validation-for="ItemCardapio.PrecoBase" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemCardapio.Periodo" class="control-label"></label>
+                <select asp-for="ItemCardapio.Periodo" asp-items="Html.GetEnumSelectList<A1.Models.Periodo>()" class="form-control"></select>
+                <span asp-validation-for="ItemCardapio.Periodo" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Voltar para a Lista</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
