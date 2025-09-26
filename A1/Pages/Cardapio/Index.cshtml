@@ -1,0 +1,33 @@
+﻿@page
+@model A1.Pages.Cardapio.IndexModel
+@{
+    ViewData["Title"] = "Cardápio";
+}
+
+<h1>Cardápio</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Criar Novo Item</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Período</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ItensCardapio)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
+                <td>@Html.DisplayFor(modelItem => item.PrecoBase)</td>
+                <td>@Html.DisplayFor(modelItem => item.Periodo)</td>
+            </tr>
+        }
+    </tbody>
+</table>
