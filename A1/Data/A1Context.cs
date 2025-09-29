@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using A1.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace A1.Data
 {
-    public class A1Context : DbContext
+    public class A1Context : IdentityDbContext
     {
         public A1Context (DbContextOptions<A1Context> options)
             : base(options)
