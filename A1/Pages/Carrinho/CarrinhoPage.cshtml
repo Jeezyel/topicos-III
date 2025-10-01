@@ -1,0 +1,32 @@
+﻿@model A1.Pages.CarrinhoPage.CarrinhoModel
+
+<h1>Seu Carrinho</h1>
+
+@if (!Model.ItensCarrinho.Any())
+{
+    <p>Seu carrinho está vazio.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ItensCarrinho)
+            {
+                <tr>
+                    <td>@item.ItemCardapio.Nome</td>
+                    <td>@item.Quantidade</td>
+                    <td>R$ @item.ItemCardapio.PrecoBase</td>
+                    <td>R$ @(item.ItemCardapio.PrecoBase* item.Quantidade)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

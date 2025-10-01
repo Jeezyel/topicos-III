@@ -1,3 +1,4 @@
+using A1.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,10 @@ namespace A1.Pages.Admin
     {
         //private readonly A1.Data.A1Context _context;
 
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ControlePerfilModel(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public ControlePerfilModel(UserManager<Usuario> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -47,7 +48,7 @@ namespace A1.Pages.Admin
                 var roles = await _userManager.GetRolesAsync(user); // Agora funciona sem conflito
                 Users.Add(new UserViewModel
                 {
-                    Id = user.Id,
+                    Id = user.Id.ToString(),
                     Email = user.Email,
                     IsAdmin = roles.Contains("Admin")
                 });
@@ -55,9 +56,9 @@ namespace A1.Pages.Admin
         }
 
 
-        public async Task<IActionResult> OnPostPromoverAsync(string id)
+        public async Task<IActionResult> OnPostPromoverAsync(string Email)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByEmailAsync(Email);
             if (user == null)
             {
                 return NotFound();
@@ -68,7 +69,22 @@ namespace A1.Pages.Admin
                 await _roleManager.CreateAsync(new IdentityRole("Admin"));
             }
 
-            await _userManager.AddToRoleAsync(user, "Admin");
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                ModelState.AddModelError(string.Empty, "Usuário já é administrador.");
+                return Page();
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, "Admin");
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return Page();
+            }
+
             return RedirectToPage();
         }
     }

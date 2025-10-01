@@ -4,6 +4,7 @@ using A1.Data;
 using A1.Customs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using A1.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,13 +14,12 @@ builder.Services.AddDbContext<A1Context>(options =>
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<A1Context>();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddIdentity<Usuario /*IdentityUser*/, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<A1Context>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
 

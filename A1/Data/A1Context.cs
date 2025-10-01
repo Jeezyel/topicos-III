@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace A1.Data
 {
-    public class A1Context : IdentityDbContext
+    public class A1Context : IdentityDbContext<Usuario>/**/
     {
         public A1Context (DbContextOptions<A1Context> options)
             : base(options)
@@ -20,5 +20,7 @@ namespace A1.Data
         public DbSet<Reserva> Reserva { get; set; } = default!;
         public DbSet<ItemCardapio> ItemCardapio { get; set; } = default!;
         public DbSet<Ingrediente> Ingrediente { get; set; } = default!;
+        public DbSet<Carrinho> Carrinhos { get; set; }
+        public DbSet<ItemCarrinho> ItensCarrinho { get; set; }
     }
 }

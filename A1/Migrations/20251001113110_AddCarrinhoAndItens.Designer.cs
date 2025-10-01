@@ -4,6 +4,7 @@ using A1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace A1.Migrations
 {
     [DbContext(typeof(A1Context))]
-    partial class A1ContextModelSnapshot : ModelSnapshot
+    [Migration("20251001113110_AddCarrinhoAndItens")]
+    partial class AddCarrinhoAndItens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +41,7 @@ namespace A1.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Carrinhos");
+                    b.ToTable("Carrinho");
                 });
 
             modelBuilder.Entity("A1.Models.Endereco", b =>
@@ -108,6 +111,9 @@ namespace A1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CarrinhoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -126,6 +132,8 @@ namespace A1.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarrinhoId");
 
                     b.ToTable("ItemCardapio");
                 });
@@ -198,6 +206,7 @@ namespace A1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -235,9 +244,11 @@ namespace A1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Senha")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -430,10 +441,17 @@ namespace A1.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("A1.Models.ItemCardapio", b =>
+                {
+                    b.HasOne("A1.Models.Carrinho", null)
+                        .WithMany("Itens")
+                        .HasForeignKey("CarrinhoId");
+                });
+
             modelBuilder.Entity("A1.Models.ItemCarrinho", b =>
                 {
                     b.HasOne("A1.Models.Carrinho", "Carrinho")
-                        .WithMany("Itens")
+                        .WithMany()
                         .HasForeignKey("CarrinhoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

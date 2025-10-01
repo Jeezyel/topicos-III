@@ -24,7 +24,7 @@
                     @if (!user.IsAdmin)
                     {
                         <form method="post">
-                            <input type="hidden" name="id" value="@user.Id" />
+                            <input type="hidden" name="Email" value="@user.Email" />
                             <button type="submit" asp-page-handler="Promover" class="btn btn-primary">
                                 Promover para Admin
                             </button>
