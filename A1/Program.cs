@@ -25,12 +25,21 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+
+    var context = scope.ServiceProvider.GetRequiredService<A1Context>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    // Cuidado: isso apaga o banco TODA vez que rodar
+    context.Database.EnsureDeleted(); // apaga
+    context.Database.Migrate();       // recria e aplica migrations
+
     string[] roles = { "Admin", "Usuario" };
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
+        {
             await roleManager.CreateAsync(new IdentityRole(role));
+        }
     }
 }
 

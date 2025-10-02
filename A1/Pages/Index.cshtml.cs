@@ -1,38 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using A1.Data;
+using A1.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using A1.Data;
-using A1.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace A1.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly A1.Data.A1Context _context;
+        private readonly ILogger<IndexModel> _logger;
+        private readonly A1Context _context;
 
-        public IndexModel(A1.Data.A1Context context)
+        public ItemCardapio? SugestaoAlmoco { get; private set; }
+        public ItemCardapio? SugestaoJantar { get; private set; }
+
+        public IndexModel(A1Context context)
         {
             _context = context;
         }
 
-        public IList<ItemCarrinho> ItemCarrinho { get;set; } = default!;
-        public List<ItemCardapio> Cardapio { get; set; }
-
-        /*public async Task OnGetAsync()
+        public async Task OnGetAsync()
         {
-            ItemCarrinho = await _context.ItensCarrinho
-                .Include(i => i.Carrinho)
-                .Include(i => i.ItemCardapio).ToListAsync();
-        }*/
+            // Pega a data de hoje para a consulta
+            var hoje = DateOnly.FromDateTime(DateTime.Now);
 
-        public void OnGet()
-        {
-            // Aqui você pode buscar os itens do banco de dados
-            Cardapio = _context.ItemCardapio.ToList(); // Supondo que você tenha um DbSet<ItemCardapio> no seu contexto
+            // Busca a sugestão do dia para o Almoço
+            SugestaoAlmoco = await _context.SugestoesDiarias
+                .Where(s => s.Data == hoje && s.Periodo == Periodo.Almoco)
+                .Select(s => s.ItemCardapio)
+                .FirstOrDefaultAsync();
+
+            // Busca a sugestão do dia para o Jantar
+            SugestaoJantar = await _context.SugestoesDiarias
+                .Where(s => s.Data == hoje && s.Periodo == Periodo.Jantar)
+                .Select(s => s.ItemCardapio)
+                .FirstOrDefaultAsync();
         }
     }
 }

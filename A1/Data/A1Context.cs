@@ -26,6 +26,7 @@ namespace A1.Data
         public DbSet<ParceiroApp> ParceirosApp { get; set; }
 
         // Tabelas de Atendimento
+        public DbSet<ItemCardapio> ItemCardapio { get; set; }
         public DbSet<Atendimento> Atendimentos { get; set; }
         public DbSet<AtendimentoPresencial> AtendimentosPresenciais { get; set; }
         public DbSet<AtendimentoDeliveryProprio> AtendimentosDeliveryProprio { get; set; }
