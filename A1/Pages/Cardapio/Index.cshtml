@@ -1,22 +1,30 @@
-﻿@page
+@page
 @model A1.Pages.Cardapio.IndexModel
+
 @{
-    ViewData["Title"] = "Cardápio";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Cardápio</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-page="Create" class="btn btn-primary">Criar Novo Item</a>
+    <a asp-page="Create">Create New</a>
 </p>
-
 <table class="table">
     <thead>
         <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th>Período</th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItensCardapio[0].Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItensCardapio[0].PrecoBase)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItensCardapio[0].Periodo)
+            </th>
+            <th>
+                Ingredientes
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -24,13 +32,30 @@
         @foreach (var item in Model.ItensCardapio)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Nome)</td>
-                <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
-                <td>@Html.DisplayFor(modelItem => item.PrecoBase)</td>
-                <td>@Html.DisplayFor(modelItem => item.Periodo)</td>
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Excluir</a>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrecoBase)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Periodo)
+                </td>
+                <td>
+                    @if (item.Ingredientes != null && item.Ingredientes.Any())
+                    {
+                        // Transforma a lista de ingredientes em um texto separado por v�rgulas
+                        @string.Join(", ", item.Ingredientes.Select(ing => ing.Nome))
+                    }
+                    else
+                    {
+                        <span>Nenhum</span>
+                    }
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }

@@ -15,12 +15,29 @@ namespace A1.Data
         {
         }
 
-        public DbSet<A1.Models.Usuario> Usuario { get; set; } = default!;
-        public DbSet<Endereco> Endereco { get; set; } = default!;
-        public DbSet<Reserva> Reserva { get; set; } = default!;
-        public DbSet<ItemCardapio> ItemCardapio { get; set; } = default!;
-        public DbSet<Ingrediente> Ingrediente { get; set; } = default!;
-        public DbSet<Carrinho> Carrinhos { get; set; }
-        public DbSet<ItemCarrinho> ItensCarrinho { get; set; }
+        // Tabelas principais
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<ItemCardapio> ItensCardapio { get; set; }
+        public DbSet<Ingrediente> Ingredientes { get; set; }
+        public DbSet<Reserva> Reservas { get; set; }
+        public DbSet<Mesa> Mesas { get; set; }
+        public DbSet<Endereco> Enderecos { get; set; }
+        public DbSet<SugestaoDiaria> SugestoesDiarias { get; set; }
+        public DbSet<ParceiroApp> ParceirosApp { get; set; }
+
+        // Tabelas de Atendimento
+        public DbSet<Atendimento> Atendimentos { get; set; }
+        public DbSet<AtendimentoPresencial> AtendimentosPresenciais { get; set; }
+        public DbSet<AtendimentoDeliveryProprio> AtendimentosDeliveryProprio { get; set; }
+        public DbSet<AtendimentoDeliveryAplicativo> AtendimentosDeliveryAplicativo { get; set; }
+
+        public DbSet<PedidoItem> PedidoItens { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<SugestaoDiaria>()
+                .HasIndex(s => new { s.Data, s.Periodo })
+                .IsUnique();
+        }
     }
 }

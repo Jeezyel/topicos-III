@@ -24,12 +24,6 @@ namespace A1.Pages.CarrinhoPage
         {
             var userId = _userManager.GetUserId(User);
 
-            var carrinho = await _context.Carrinhos
-                .Include(c => c.Itens)
-                    .ThenInclude(ic => ic.ItemCardapio)
-                .FirstOrDefaultAsync(c => c.Usuario.Id.ToString() == userId);
-
-            ItensCarrinho = carrinho?.Itens.ToList() ?? new List<ItemCarrinho>();
         }
     }
 

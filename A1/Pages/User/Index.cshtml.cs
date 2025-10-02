@@ -26,7 +26,7 @@ namespace A1.Pages.User
 
         public async Task OnGetAsync()
         {
-            Usuario = await _context.Usuario.ToListAsync();
+            Usuario = await _context.Users.ToListAsync();
         }
     }
 }

@@ -1,0 +1,60 @@
+@page
+@model A1.Pages.Reservas.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Reserva</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Reserva.Id" />
+            <div class="form-group">
+                <label asp-for="Reserva.Data" class="control-label"></label>
+                <input asp-for="Reserva.Data" class="form-control" />
+                <span asp-validation-for="Reserva.Data" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reserva.Horario" class="control-label"></label>
+                <input asp-for="Reserva.Horario" class="form-control" />
+                <span asp-validation-for="Reserva.Horario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reserva.NumeroPessoas" class="control-label"></label>
+                <input asp-for="Reserva.NumeroPessoas" class="form-control" />
+                <span asp-validation-for="Reserva.NumeroPessoas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reserva.CodigoConfirmacao" class="control-label"></label>
+                <input asp-for="Reserva.CodigoConfirmacao" class="form-control" />
+                <span asp-validation-for="Reserva.CodigoConfirmacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reserva.UsuarioId" class="control-label"></label>
+                <select asp-for="Reserva.UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
+                <span asp-validation-for="Reserva.UsuarioId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reserva.MesaId" class="control-label"></label>
+                <select asp-for="Reserva.MesaId" class="form-control" asp-items="ViewBag.MesaId"></select>
+                <span asp-validation-for="Reserva.MesaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

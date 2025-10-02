@@ -35,7 +35,7 @@ namespace A1.Pages.User
                 return Page();
             }
 
-            _context.Usuario.Add(Usuario);
+            _context.Users.Add(Usuario);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

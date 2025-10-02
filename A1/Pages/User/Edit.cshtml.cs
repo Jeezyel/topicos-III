@@ -3,11 +3,7 @@ using A1.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace A1.Pages.User
@@ -15,9 +11,9 @@ namespace A1.Pages.User
     [Authorize]
     public class EditModel : PageModel
     {
-        private readonly A1.Data.A1Context _context;
+        private readonly A1Context _context;
 
-        public EditModel(A1.Data.A1Context context)
+        public EditModel(A1Context context)
         {
             _context = context;
         }
@@ -25,14 +21,14 @@ namespace A1.Pages.User
         [BindProperty]
         public Usuario Usuario { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+            var usuario = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            var usuario =  await _context.Usuario.FirstOrDefaultAsync(m => m.Id == id);
             if (usuario == null)
             {
                 return NotFound();
@@ -41,16 +37,21 @@ namespace A1.Pages.User
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+            var userToUpdate = await _context.Users.FindAsync(Usuario.Id);
 
-            _context.Attach(Usuario).State = EntityState.Modified;
+            if (userToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            userToUpdate.Nome = Usuario.Nome;
+            userToUpdate.PhoneNumber = Usuario.PhoneNumber;
 
             try
             {
@@ -70,10 +71,9 @@ namespace A1.Pages.User
 
             return RedirectToPage("./Index");
         }
-
-        private bool UsuarioExists(int id)
+        private bool UsuarioExists(string id)
         {
-            return _context.Usuario.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
