@@ -37,6 +37,15 @@
                             </li>
                         }
                     </ul>
+                    <ul class="navbar-nav flex-grow-1">
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Reservas/Index">Minhas Reservas</a>
+                            </li>
+                        }
+                    </ul>
                     <partial name="_Login" />
                 </div>
             </div>
@@ -50,7 +59,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - A1 - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2025 - ExpoDeli - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 

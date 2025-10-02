@@ -30,7 +30,7 @@ namespace A1.Pages.User
                 return NotFound();
             }
 
-            var usuario = await _context.Usuario.FirstOrDefaultAsync(m => m.Id == id);
+            var usuario = await _context.Users.FirstOrDefaultAsync();
             if (usuario == null)
             {
                 return NotFound();

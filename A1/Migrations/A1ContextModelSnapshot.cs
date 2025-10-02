@@ -22,7 +22,7 @@ namespace A1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("A1.Models.Carrinho", b =>
+            modelBuilder.Entity("A1.Models.Atendimento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,15 +30,21 @@ namespace A1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("UsuarioId")
+                    b.Property<DateTime>("DataHoraInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId");
+                    b.ToTable("Atendimentos");
 
-                    b.ToTable("Carrinhos");
+                    b.HasDiscriminator().HasValue("Atendimento");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("A1.Models.Endereco", b =>
@@ -69,18 +75,15 @@ namespace A1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UsuarioId1")
+                    b.Property<string>("UsuarioId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId1");
+                    b.HasIndex("UsuarioId");
 
-                    b.ToTable("Endereco");
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("A1.Models.Ingrediente", b =>
@@ -97,7 +100,7 @@ namespace A1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingrediente");
+                    b.ToTable("Ingredientes");
                 });
 
             modelBuilder.Entity("A1.Models.ItemCardapio", b =>
@@ -122,15 +125,12 @@ namespace A1.Migrations
                     b.Property<double>("PrecoBase")
                         .HasColumnType("float");
 
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("ItemCardapio");
+                    b.ToTable("ItensCardapio");
                 });
 
-            modelBuilder.Entity("A1.Models.ItemCarrinho", b =>
+            modelBuilder.Entity("A1.Models.Mesa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -138,22 +138,96 @@ namespace A1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CarrinhoId")
+                    b.Property<int>("Capacidade")
                         .HasColumnType("int");
+
+                    b.Property<int>("Numero")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Mesas");
+                });
+
+            modelBuilder.Entity("A1.Models.ParceiroApp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NomeApp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ParceirosApp");
+                });
+
+            modelBuilder.Entity("A1.Models.Pedido", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AtendimentoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataHora")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AtendimentoId")
+                        .IsUnique();
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Pedidos");
+                });
+
+            modelBuilder.Entity("A1.Models.PedidoItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ItemCardapioId")
                         .HasColumnType("int");
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarrinhoId");
-
                     b.HasIndex("ItemCardapioId");
 
-                    b.ToTable("ItensCarrinho");
+                    b.HasIndex("PedidoId");
+
+                    b.ToTable("PedidoItens");
                 });
 
             modelBuilder.Entity("A1.Models.Reserva", b =>
@@ -164,25 +238,59 @@ namespace A1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("HorarioReserva")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Mesa")
-                        .IsRequired()
+                    b.Property<string>("CodigoConfirmacao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<DateOnly>("Data")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("Horario")
+                        .HasColumnType("time");
+
+                    b.Property<int?>("MesaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UsuarioId1")
+                    b.Property<int>("NumeroPessoas")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId1");
+                    b.HasIndex("MesaId");
 
-                    b.ToTable("Reserva");
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Reservas");
+                });
+
+            modelBuilder.Entity("A1.Models.SugestaoDiaria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("Data")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ItemCardapioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Periodo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemCardapioId");
+
+                    b.HasIndex("Data", "Periodo")
+                        .IsUnique();
+
+                    b.ToTable("SugestoesDiarias");
                 });
 
             modelBuilder.Entity("A1.Models.Usuario", b =>
@@ -232,12 +340,6 @@ namespace A1.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Senha")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -408,10 +510,48 @@ namespace A1.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("A1.Models.Carrinho", b =>
+            modelBuilder.Entity("A1.Models.AtendimentoDeliveryAplicativo", b =>
+                {
+                    b.HasBaseType("A1.Models.Atendimento");
+
+                    b.Property<decimal>("ComissaoParceiro")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ParceiroAppId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TaxaParceiro")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasIndex("ParceiroAppId");
+
+                    b.HasDiscriminator().HasValue("AtendimentoDeliveryAplicativo");
+                });
+
+            modelBuilder.Entity("A1.Models.AtendimentoDeliveryProprio", b =>
+                {
+                    b.HasBaseType("A1.Models.Atendimento");
+
+                    b.Property<decimal>("TaxaDeEntregaFixa")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasDiscriminator().HasValue("AtendimentoDeliveryProprio");
+                });
+
+            modelBuilder.Entity("A1.Models.AtendimentoPresencial", b =>
+                {
+                    b.HasBaseType("A1.Models.Atendimento");
+
+                    b.Property<int>("NumeroMesa")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("AtendimentoPresencial");
+                });
+
+            modelBuilder.Entity("A1.Models.Endereco", b =>
                 {
                     b.HasOne("A1.Models.Usuario", "Usuario")
-                        .WithMany()
+                        .WithMany("Enderecos")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -419,45 +559,70 @@ namespace A1.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("A1.Models.Endereco", b =>
+            modelBuilder.Entity("A1.Models.Pedido", b =>
                 {
-                    b.HasOne("A1.Models.Usuario", "Usuario")
-                        .WithMany("Enderecos")
-                        .HasForeignKey("UsuarioId1")
+                    b.HasOne("A1.Models.Atendimento", "Atendimento")
+                        .WithOne("Pedido")
+                        .HasForeignKey("A1.Models.Pedido", "AtendimentoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("A1.Models.Usuario", "Usuario")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Atendimento");
 
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("A1.Models.ItemCarrinho", b =>
+            modelBuilder.Entity("A1.Models.PedidoItem", b =>
                 {
-                    b.HasOne("A1.Models.Carrinho", "Carrinho")
-                        .WithMany("Itens")
-                        .HasForeignKey("CarrinhoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("A1.Models.ItemCardapio", "ItemCardapio")
                         .WithMany()
                         .HasForeignKey("ItemCardapioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Carrinho");
+                    b.HasOne("A1.Models.Pedido", "Pedido")
+                        .WithMany("Itens")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ItemCardapio");
+
+                    b.Navigation("Pedido");
                 });
 
             modelBuilder.Entity("A1.Models.Reserva", b =>
                 {
+                    b.HasOne("A1.Models.Mesa", "Mesa")
+                        .WithMany("Reservas")
+                        .HasForeignKey("MesaId");
+
                     b.HasOne("A1.Models.Usuario", "Usuario")
                         .WithMany("Reservas")
-                        .HasForeignKey("UsuarioId1")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Mesa");
+
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("A1.Models.SugestaoDiaria", b =>
+                {
+                    b.HasOne("A1.Models.ItemCardapio", "ItemCardapio")
+                        .WithMany()
+                        .HasForeignKey("ItemCardapioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ItemCardapio");
                 });
 
             modelBuilder.Entity("IngredienteItemCardapio", b =>
@@ -526,7 +691,34 @@ namespace A1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("A1.Models.Carrinho", b =>
+            modelBuilder.Entity("A1.Models.AtendimentoDeliveryAplicativo", b =>
+                {
+                    b.HasOne("A1.Models.ParceiroApp", "ParceiroApp")
+                        .WithMany("Atendimentos")
+                        .HasForeignKey("ParceiroAppId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParceiroApp");
+                });
+
+            modelBuilder.Entity("A1.Models.Atendimento", b =>
+                {
+                    b.Navigation("Pedido")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("A1.Models.Mesa", b =>
+                {
+                    b.Navigation("Reservas");
+                });
+
+            modelBuilder.Entity("A1.Models.ParceiroApp", b =>
+                {
+                    b.Navigation("Atendimentos");
+                });
+
+            modelBuilder.Entity("A1.Models.Pedido", b =>
                 {
                     b.Navigation("Itens");
                 });
@@ -534,6 +726,8 @@ namespace A1.Migrations
             modelBuilder.Entity("A1.Models.Usuario", b =>
                 {
                     b.Navigation("Enderecos");
+
+                    b.Navigation("Pedidos");
 
                     b.Navigation("Reservas");
                 });

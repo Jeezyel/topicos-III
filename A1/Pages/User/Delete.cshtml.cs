@@ -31,7 +31,7 @@ namespace A1.Pages.User
                 return NotFound();
             }
 
-            var usuario = await _context.Usuario.FirstOrDefaultAsync(m => m.Id == id);
+            var usuario = await _context.Users.FirstOrDefaultAsync();
 
             if (usuario == null)
             {
@@ -51,11 +51,11 @@ namespace A1.Pages.User
                 return NotFound();
             }
 
-            var usuario = await _context.Usuario.FindAsync(id);
+            var usuario = await _context.Users.FindAsync(id);
             if (usuario != null)
             {
                 Usuario = usuario;
-                _context.Usuario.Remove(Usuario);
+                _context.Users.Remove(Usuario);
                 await _context.SaveChangesAsync();
             }
 

@@ -1,0 +1,48 @@
+﻿@page
+@model A1.Pages.Admin.SugestaoDoChefeModel
+@{
+    ViewData["Title"] = "Sugestão do Chefe";
+}
+
+<h1>Gerenciar Sugestão do Chefe</h1>
+<hr />
+
+<p>Selecione os pratos que serão a sugestão para o dia de hoje: <strong>@Model.DataDeHoje.ToShortDateString()</strong></p>
+
+@if (!string.IsNullOrEmpty(Model.MensagemSucesso))
+{
+    <div class="alert alert-success" role="alert">
+        @Model.MensagemSucesso
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div class="card">
+                <div class="card-header">
+                    Sugestões do Dia
+                </div>
+                <div class="card-body">
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-bold">Sugestão do Almoço</label>
+                        <select asp-for="AlmocoSelecionadoId" class="form-control" asp-items="Model.AlmocoOptions">
+                            <option value="">-- Nenhuma --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-bold">Sugestão do Jantar</label>
+                        <select asp-for="JantarSelecionadoId" class="form-control" asp-items="Model.JantarOptions">
+                            <option value="">-- Nenhuma --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <input type="submit" value="Salvar Sugestões" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
