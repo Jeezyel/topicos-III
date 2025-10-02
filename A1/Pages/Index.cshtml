@@ -4,7 +4,94 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Estilo (CSS) -->
+<style>
+    body {
+        background: #f2f4f8;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .card {
+        max-width: 600px;
+        margin: 100px auto;
+        background: white;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+        .card h1 {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .card a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .card a:hover {
+                text-decoration: underline;
+            }
+
+        .card button {
+            margin-top: 30px;
+            padding: 10px 25px;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .card button:hover {
+                background-color: #0056b3;
+            }
+
+    .thank-you {
+        margin-top: 20px;
+        font-size: 1.2rem;
+        color: green;
+        font-weight: bold;
+        display: none;
+        animation: fadeIn 0.8s ease forwards;
+    }
+</style>
+
+<!-- card 1 -->
+@foreach (var item in Model.Cardapio)
+{
+    <div class="card">
+        <div class="categoria">@item.Periodo</div>
+        <div class="conteudo">
+            <h3>@item.Nome</h3>
+            <p>@item.Descricao</p>
+            <p>Preço: R$ @item.PrecoBase.ToString("F2")</p>
+            <p>Quantidade disponível: @item.Quantidade</p>
+        </div>
+    </div>
+}
+    
+
+
+<!-- Script (JavaScript) -->
+@section Scripts {
+    <script>
+        function showThanks() {
+            const msg = document.getElementById("thankYouMessage");
+            msg.style.display = "block";
+        }
+    </script>
+}

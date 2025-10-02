@@ -1,8 +1,109 @@
 ﻿@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Nossa História";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<!-- Estilo unificado com a página Home -->
+<style>
+    body {
+        background: #f2f4f8;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .history-box {
+        max-width: 700px;
+        margin: 100px auto;
+        background: white;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+        .history-box h1 {
+            font-size: 2.8rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .history-box p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .history-box button {
+            margin-top: 30px;
+            padding: 10px 25px;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .history-box button:hover {
+                background-color: #0056b3;
+            }
+
+    .extra-info {
+        display: none;
+        margin-top: 25px;
+        animation: fadeIn 0.8s ease forwards;
+        text-align: left;
+    }
+
+    
+</style>
+
+<!-- Conteúdo -->
+<div class="history-box">
+    <h1>@ViewData["Title"]</h1>
+
+    <p>
+        O restaurante <strong>Sabor & Tradição</strong> nasceu em 1985 no coração de uma pequena cidade.
+        Fundado pela carismática Dona Rosa, ele surgiu com a missão de servir comida caseira feita com amor e respeito aos ingredientes.
+    </p>
+
+    <p>
+        Com receitas passadas de geração em geração, o restaurante se tornou um ponto de encontro de famílias e turistas
+        que buscam sabor, aconchego e tradição.
+    </p>
+
+    <p>
+        Hoje, após quase 40 anos de história, mantemos viva a essência da Dona Rosa em cada prato servido.
+    </p>
+
+    <button onclick="mostrarMais()">Ler mais sobre a história</button>
+
+    <div class="extra-info" id="extraInfo">
+        <p>
+            O cardápio do Sabor & Tradição inclui desde o famoso "arroz de forno da vovó" até o premiado "bolo de fubá com goiabada".
+            Cada receita tem uma história, cada ingrediente tem propósito.
+        </p>
+
+        <p>
+            Venha nos visitar e faça parte dessa história que continua sendo escrita, prato após prato.
+        </p>
+    </div>
+</div>
+
+<!-- Script -->
+@section Scripts {
+    <script>
+        function mostrarMais() {
+            const info = document.getElementById("extraInfo");
+            if (info.style.display === "block") {
+                info.style.display = "none";
+            } else {
+                info.style.display = "block";
+            }
+        }
+    </script>
+}
