@@ -50,23 +50,6 @@
 
                     <div class="d-flex align-items-center">
                         <ul class="navbar-nav">
-                            @{
-                                int quantidadeNoCarrinho = 0;
-                                // Código mais seguro para buscar a quantidade
-                                if (HttpContextAccessor.HttpContext?.Session != null)
-                                {
-                                    var carrinho = HttpContextAccessor.HttpContext.Session.Get<List<A1.Models.ItemCarrinho>>("Carrinho");
-                                    if (carrinho != null)
-                                    {
-                                        quantidadeNoCarrinho = carrinho.Sum(i => i.Quantidade);
-                                    }
-                                }
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Carrinho/CarrinhoPage">
-                                    <i class="bi bi-cart-fill"></i> Carrinho (@quantidadeNoCarrinho)
-                                </a>
-                            </li>
                         </ul>
                         <partial name="_LoginPartial" />
                     </div>
