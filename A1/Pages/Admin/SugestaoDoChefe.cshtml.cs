@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace A1.Pages.Admin
 {
     // adicionar uma autorização para que apenas Admins acessem esta página no futuro.
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class SugestaoDoChefeModel : PageModel
     {
         private readonly A1Context _context;
