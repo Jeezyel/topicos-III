@@ -22,7 +22,7 @@ namespace A1.Models
         public string? CodigoConfirmacao { get; set; }
 
         // Relacionamentos
-        public string UsuarioId { get; set; } = default!;
+        public string? UsuarioId { get; set; } = default!;
 
         [Display(Name = "Usuário")]
         public Usuario Usuario { get; set; } = default!;
