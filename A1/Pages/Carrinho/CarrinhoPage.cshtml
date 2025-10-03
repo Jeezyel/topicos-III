@@ -1,32 +1,49 @@
-﻿@model A1.Pages.CarrinhoPage.CarrinhoModel
-
-<h1>Seu Carrinho</h1>
-
-@if (!Model.ItensCarrinho.Any())
-{
-    <p>Seu carrinho está vazio.</p>
+﻿@page
+@model A1.Pages.Carrinho.CarrinhoPageModel
+@{
+    ViewData["Title"] = "Meu Carrinho";
 }
-else
+
+<h1>Meu Carrinho de Compras</h1>
+
+@if (Model.Carrinho != null && Model.Carrinho.Any())
 {
-    <table>
+    <table class="table">
         <thead>
             <tr>
-                <th>Produto</th>
-                <th>Quantidade</th>
+                <th>Item</th>
                 <th>Preço Unitário</th>
-                <th>Total</th>
+                <th>Quantidade</th>
+                <th>Subtotal</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ItensCarrinho)
+            @foreach (var item in Model.Carrinho)
             {
                 <tr>
-                    <td>@item.ItemCardapio.Nome</td>
+                    <td>@item.Nome</td>
+                    <td>@item.PrecoUnitario.ToString("C")</td>
                     <td>@item.Quantidade</td>
-                    <td>R$ @item.ItemCardapio.PrecoBase</td>
-                    <td>R$ @(item.ItemCardapio.PrecoBase* item.Quantidade)</td>
+                    <td>@item.Subtotal.ToString("C")</td>
                 </tr>
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td class="fs-5 fw-bold">@Model.TotalCarrinho.ToString("C")</td>
+            </tr>
+        </tfoot>
     </table>
+
+    <div class="text-end mt-4">
+        <a href="#" class="btn btn-primary btn-lg">Finalizar Pedido</a>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        Seu carrinho de compras está vazio.
+    </div>
+    <a asp-page="/Menu" class="btn btn-primary">Voltar ao Cardápio</a>
 }

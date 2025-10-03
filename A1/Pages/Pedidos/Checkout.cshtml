@@ -1,0 +1,114 @@
+﻿@page "{id:int}"
+@model A1.Pages.Pedidos.CheckoutModel
+@{
+    ViewData["Title"] = "Finalizar Pedido";
+}
+
+<h1>Finalizar Pedido</h1>
+<hr />
+
+<div class="row g-5">
+    <div class="col-md-7">
+        <h4>Escolha o Tipo de Atendimento</h4>
+        <form method="post">
+            <input type="hidden" asp-for="ItemDoPedido.Id" />
+
+            <div class="list-group">
+                <label class="list-group-item d-flex gap-3">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="TipoAtendimento" id="atendimentoPresencial" value="Presencial" data-taxa="0" checked>
+                    <span class="pt-1 form-checked-content">
+                        <strong>Presencial</strong>
+                        <small class="d-block text-muted">Retire seu pedido diretamente no balcão (sem taxas).</small>
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-3">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="TipoAtendimento" id="deliveryProprio" value="DeliveryProprio" data-taxa="@Model.TaxaDeliveryProprio">
+                    <span class="pt-1 form-checked-content">
+                        <strong>Delivery Próprio</strong>
+                        <small class="d-block text-muted">Receba em casa com nossa entrega (+ @Model.TaxaDeliveryProprio.ToString("C")).</small>
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-3">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="TipoAtendimento" id="deliveryApp" value="DeliveryApp" data-taxa="@Model.TaxaDeliveryApp">
+                    <span class="pt-1 form-checked-content">
+                        <strong>Delivery por Aplicativo</strong>
+                        <small class="d-block text-muted">Peça através de nossos parceiros (+ @Model.TaxaDeliveryApp.ToString("C")).</small>
+                    </span>
+                </label>
+            </div>
+
+            <hr class="my-4">
+
+            <button type="submit" class="w-100 btn btn-success btn-lg">Confirmar e Pagar</button>
+        </form>
+    </div>
+
+    <div class="col-md-5 order-md-first">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Resumo do Pedido</span>
+        </h4>
+        <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div>
+                    <h6 class="my-0">@Model.ItemDoPedido.Nome</h6>
+                    <small class="text-muted">@Model.ItemDoPedido.Descricao</small>
+                </div>
+                <span class="text-muted">@Model.PrecoBase.ToString("C")</span>
+            </li>
+            @if (Model.Desconto > 0)
+            {
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="text-success">
+                        <h6 class="my-0">Desconto "Sugestão do Chefe"</h6>
+                    </div>
+                    <span class="text-success">−@Model.Desconto.ToString("C")</span>
+                </li>
+            }
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Taxa de Entrega</span>
+                <strong id="taxa-entrega-display">R$ 0,00</strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Total (BRL)</span>
+                <strong id="valor-total-display" class="fs-5">@Model.PrecoComDesconto.ToString("C")</strong>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Função para calcular e atualizar os totais na tela
+        function atualizarTotais() {
+            // Pega os valores base que o C# nos enviou
+            const precoComDesconto = parseFloat('@Model.PrecoComDesconto.ToString("N2").Replace(",", ".")');
+
+            // Encontra o radio button que está selecionado
+            const radioSelecionado = document.querySelector('input[name="TipoAtendimento"]:checked');
+
+            // Pega a taxa do atributo data-taxa do radio selecionado
+            const taxaEntrega = parseFloat(radioSelecionado.getAttribute('data-taxa').replace(",", "."));
+
+            // Calcula o total final
+            const valorTotal = precoComDesconto + taxaEntrega;
+
+            // Pega o formato de moeda do Brasil
+            const formatadorMoeda = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+
+            // Atualiza os elementos na tela com os valores formatados
+            document.getElementById('taxa-entrega-display').innerText = formatadorMoeda.format(taxaEntrega);
+            document.getElementById('valor-total-display').innerText = formatadorMoeda.format(valorTotal);
+        }
+
+        // Adiciona um "ouvinte" para o evento de mudança em todos os radio buttons
+        document.querySelectorAll('input[name="TipoAtendimento"]').forEach(radio => {
+            radio.addEventListener('change', atualizarTotais);
+        });
+
+        // Executa a função uma vez quando a página carrega para definir o valor inicial
+        document.addEventListener('DOMContentLoaded', atualizarTotais);
+    </script>
+}

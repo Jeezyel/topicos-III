@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using A1.Models;
+using System.ComponentModel.DataAnnotations.Schema; // Adicione este using
 
-namespace A1.Models
+public class AtendimentoDeliveryProprio : Atendimento
 {
-    public class AtendimentoDeliveryProprio : Atendimento
-    {
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal TaxaDeEntregaFixa { get; set; }
-    }
+    [Column(TypeName = "decimal(18,2)")] // Boa prática para o banco de dados
+    public decimal TaxaDeEntregaFixa { get; set; }
 }
