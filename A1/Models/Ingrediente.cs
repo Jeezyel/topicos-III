@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string Nome { get; set; }
 
-        public ICollection<ItemCardapio> ItensCardapio { get; set; } = new List<ItemCardapio>();
+        public ICollection<ItemIngrediente> ItemIngredientes { get; set; } = new List<ItemIngrediente>();
     }
 }

@@ -42,10 +42,9 @@
                     @Html.DisplayFor(modelItem => item.Periodo)
                 </td>
                 <td>
-                    @if (item.Ingredientes != null && item.Ingredientes.Any())
+                    @if (item.ItemIngredientes != null && item.ItemIngredientes.Any())
                     {
-                        // Transforma a lista de ingredientes em um texto separado por vírgulas
-                        @string.Join(", ", item.Ingredientes.Select(ing => ing.Nome))
+                        @string.Join(", ", item.ItemIngredientes.Select(ii => ii.Ingrediente.Nome))
                     }
                     else
                     {

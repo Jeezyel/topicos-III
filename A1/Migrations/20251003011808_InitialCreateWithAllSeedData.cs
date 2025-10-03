@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace A1.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreateWithAllSeedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -238,24 +240,24 @@ namespace A1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IngredienteItemCardapio",
+                name: "ItemIngredientes",
                 columns: table => new
                 {
-                    IngredientesId = table.Column<int>(type: "int", nullable: false),
-                    ItensCardapioId = table.Column<int>(type: "int", nullable: false)
+                    ItemCardapioId = table.Column<int>(type: "int", nullable: false),
+                    IngredienteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IngredienteItemCardapio", x => new { x.IngredientesId, x.ItensCardapioId });
+                    table.PrimaryKey("PK_ItemIngredientes", x => new { x.ItemCardapioId, x.IngredienteId });
                     table.ForeignKey(
-                        name: "FK_IngredienteItemCardapio_Ingredientes_IngredientesId",
-                        column: x => x.IngredientesId,
+                        name: "FK_ItemIngredientes_Ingredientes_IngredienteId",
+                        column: x => x.IngredienteId,
                         principalTable: "Ingredientes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_IngredienteItemCardapio_ItensCardapio_ItensCardapioId",
-                        column: x => x.ItensCardapioId,
+                        name: "FK_ItemIngredientes_ItensCardapio_ItemCardapioId",
+                        column: x => x.ItemCardapioId,
                         principalTable: "ItensCardapio",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -288,10 +290,12 @@ namespace A1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    HorarioReserva = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Data = table.Column<DateOnly>(type: "date", nullable: false),
+                    Horario = table.Column<TimeOnly>(type: "time", nullable: false),
                     NumeroPessoas = table.Column<int>(type: "int", nullable: false),
-                    UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MesaId = table.Column<int>(type: "int", nullable: false)
+                    CodigoConfirmacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    MesaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -300,14 +304,12 @@ namespace A1.Migrations
                         name: "FK_Reservas_AspNetUsers_UsuarioId",
                         column: x => x.UsuarioId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Reservas_Mesas_MesaId",
                         column: x => x.MesaId,
                         principalTable: "Mesas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -320,9 +322,7 @@ namespace A1.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(34)", maxLength: 34, nullable: false),
                     ComissaoParceiro = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     TaxaParceiro = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    ParceiroAppId = table.Column<int>(type: "int", nullable: true),
-                    TaxaDeEntregaFixa = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    NumeroMesa = table.Column<int>(type: "int", nullable: true)
+                    ParceiroAppId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -392,6 +392,83 @@ namespace A1.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "3b14a6f1-ef0b-4c89-b6b0-def987654321", null, "Usuario", "USUARIO" },
+                    { "f4dbf4dd-1df8-4e6a-9a15-abc123456789", null, "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Nome", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "1e8e011d-7fde-4b16-8078-6775d7fca57e", 0, "c3aef999-96de-4a7f-9c67-abcdef123456", "admin@admin.com", true, false, null, "Administrador", "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAIAAYagAAAAENxiM+eS0Ag9KL6O40a1TEUpV+jH0nxCFioLIPdrOJ9Y5x2Sx28OaWLn8dHwCML5nQ==", null, false, "d6f5c999-46de-4a7f-9c67-123456789abc", false, "admin@admin.com" });
+
+            migrationBuilder.InsertData(
+                table: "Ingredientes",
+                columns: new[] { "Id", "Nome" },
+                values: new object[,]
+                {
+                    { 1, "Tomate" },
+                    { 2, "Queijo Mussarela" },
+                    { 3, "Manjericão" },
+                    { 4, "Massa de Pizza" },
+                    { 5, "Frango Desfiado" },
+                    { 6, "Catupiry" },
+                    { 7, "Pão de Hambúrguer" },
+                    { 8, "Carne de Hambúrguer" },
+                    { 9, "Alface" },
+                    { 10, "Bacon" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ItensCardapio",
+                columns: new[] { "Id", "Descricao", "Nome", "Periodo", "PrecoBase" },
+                values: new object[,]
+                {
+                    { 1, "Feijoada tradicional com arroz, couve, farofa e laranja.", "Feijoada Completa", 0, 55.0 },
+                    { 2, "Filé de frango empanado, coberto com queijo e molho de tomate. Acompanha arroz e fritas.", "Frango a Parmegiana", 0, 48.0 },
+                    { 3, "Alface romana, croutons, queijo parmesão e tiras de frango grelhado.", "Salada Caesar com Frango", 0, 42.0 },
+                    { 4, "Molho de tomate, mussarela fresca e manjericão.", "Pizza Margherita", 1, 60.0 },
+                    { 5, "Arroz arbóreo cremoso com mix de cogumelos frescos.", "Risoto de Cogumelos", 1, 65.0 },
+                    { 6, "Pão brioche, hambúrguer de 180g, queijo cheddar, bacon e salada.", "Hambúrguer Gourmet", 1, 50.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Mesas",
+                columns: new[] { "Id", "Capacidade", "Numero" },
+                values: new object[,]
+                {
+                    { 1, 4, 1 },
+                    { 2, 4, 2 },
+                    { 3, 2, 3 },
+                    { 4, 2, 4 },
+                    { 5, 6, 5 },
+                    { 6, 8, 6 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "f4dbf4dd-1df8-4e6a-9a15-abc123456789", "1e8e011d-7fde-4b16-8078-6775d7fca57e" });
+
+            migrationBuilder.InsertData(
+                table: "ItemIngredientes",
+                columns: new[] { "IngredienteId", "ItemCardapioId" },
+                values: new object[,]
+                {
+                    { 1, 4 },
+                    { 2, 4 },
+                    { 3, 4 },
+                    { 4, 4 },
+                    { 7, 6 },
+                    { 8, 6 },
+                    { 9, 6 },
+                    { 10, 6 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -442,9 +519,9 @@ namespace A1.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IngredienteItemCardapio_ItensCardapioId",
-                table: "IngredienteItemCardapio",
-                column: "ItensCardapioId");
+                name: "IX_ItemIngredientes_IngredienteId",
+                table: "ItemIngredientes",
+                column: "IngredienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PedidoItens_ItemCardapioId",
@@ -511,7 +588,7 @@ namespace A1.Migrations
                 name: "Enderecos");
 
             migrationBuilder.DropTable(
-                name: "IngredienteItemCardapio");
+                name: "ItemIngredientes");
 
             migrationBuilder.DropTable(
                 name: "PedidoItens");

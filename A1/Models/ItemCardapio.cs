@@ -15,6 +15,6 @@
         public Periodo Periodo { get; set; }
 
         // Propriedade de navegação para o relacionamento N-N com Ingrediente
-        public ICollection<Ingrediente> Ingredientes { get; set; } = new List<Ingrediente>();
+        public ICollection<ItemIngrediente> ItemIngredientes { get; set; } = new List<ItemIngrediente>();
     }
 }

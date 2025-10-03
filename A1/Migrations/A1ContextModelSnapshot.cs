@@ -101,6 +101,58 @@ namespace A1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Ingredientes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nome = "Tomate"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nome = "Queijo Mussarela"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nome = "Manjericão"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Nome = "Massa de Pizza"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Nome = "Frango Desfiado"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Nome = "Catupiry"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Nome = "Pão de Hambúrguer"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Nome = "Carne de Hambúrguer"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Nome = "Alface"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Nome = "Bacon"
+                        });
                 });
 
             modelBuilder.Entity("A1.Models.ItemCardapio", b =>
@@ -127,7 +179,114 @@ namespace A1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemCardapio");
+                    b.ToTable("ItensCardapio");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Descricao = "Feijoada tradicional com arroz, couve, farofa e laranja.",
+                            Nome = "Feijoada Completa",
+                            Periodo = 0,
+                            PrecoBase = 55.0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Descricao = "Filé de frango empanado, coberto com queijo e molho de tomate. Acompanha arroz e fritas.",
+                            Nome = "Frango a Parmegiana",
+                            Periodo = 0,
+                            PrecoBase = 48.0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Descricao = "Alface romana, croutons, queijo parmesão e tiras de frango grelhado.",
+                            Nome = "Salada Caesar com Frango",
+                            Periodo = 0,
+                            PrecoBase = 42.0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Descricao = "Molho de tomate, mussarela fresca e manjericão.",
+                            Nome = "Pizza Margherita",
+                            Periodo = 1,
+                            PrecoBase = 60.0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Descricao = "Arroz arbóreo cremoso com mix de cogumelos frescos.",
+                            Nome = "Risoto de Cogumelos",
+                            Periodo = 1,
+                            PrecoBase = 65.0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Descricao = "Pão brioche, hambúrguer de 180g, queijo cheddar, bacon e salada.",
+                            Nome = "Hambúrguer Gourmet",
+                            Periodo = 1,
+                            PrecoBase = 50.0
+                        });
+                });
+
+            modelBuilder.Entity("A1.Models.ItemIngrediente", b =>
+                {
+                    b.Property<int>("ItemCardapioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ItemCardapioId", "IngredienteId");
+
+                    b.HasIndex("IngredienteId");
+
+                    b.ToTable("ItemIngredientes");
+
+                    b.HasData(
+                        new
+                        {
+                            ItemCardapioId = 4,
+                            IngredienteId = 1
+                        },
+                        new
+                        {
+                            ItemCardapioId = 4,
+                            IngredienteId = 2
+                        },
+                        new
+                        {
+                            ItemCardapioId = 4,
+                            IngredienteId = 3
+                        },
+                        new
+                        {
+                            ItemCardapioId = 4,
+                            IngredienteId = 4
+                        },
+                        new
+                        {
+                            ItemCardapioId = 6,
+                            IngredienteId = 7
+                        },
+                        new
+                        {
+                            ItemCardapioId = 6,
+                            IngredienteId = 8
+                        },
+                        new
+                        {
+                            ItemCardapioId = 6,
+                            IngredienteId = 9
+                        },
+                        new
+                        {
+                            ItemCardapioId = 6,
+                            IngredienteId = 10
+                        });
                 });
 
             modelBuilder.Entity("A1.Models.Mesa", b =>
@@ -147,6 +306,44 @@ namespace A1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Mesas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Capacidade = 4,
+                            Numero = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Capacidade = 4,
+                            Numero = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Capacidade = 2,
+                            Numero = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Capacidade = 2,
+                            Numero = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Capacidade = 6,
+                            Numero = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Capacidade = 8,
+                            Numero = 6
+                        });
                 });
 
             modelBuilder.Entity("A1.Models.ParceiroApp", b =>
@@ -380,21 +577,6 @@ namespace A1.Migrations
                         });
                 });
 
-            modelBuilder.Entity("IngredienteItemCardapio", b =>
-                {
-                    b.Property<int>("IngredientesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItensCardapioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("IngredientesId", "ItensCardapioId");
-
-                    b.HasIndex("ItensCardapioId");
-
-                    b.ToTable("IngredienteItemCardapio");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -567,26 +749,6 @@ namespace A1.Migrations
                     b.HasDiscriminator().HasValue("AtendimentoDeliveryAplicativo");
                 });
 
-            modelBuilder.Entity("A1.Models.AtendimentoDeliveryProprio", b =>
-                {
-                    b.HasBaseType("A1.Models.Atendimento");
-
-                    b.Property<decimal>("TaxaDeEntregaFixa")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasDiscriminator().HasValue("AtendimentoDeliveryProprio");
-                });
-
-            modelBuilder.Entity("A1.Models.AtendimentoPresencial", b =>
-                {
-                    b.HasBaseType("A1.Models.Atendimento");
-
-                    b.Property<int>("NumeroMesa")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("AtendimentoPresencial");
-                });
-
             modelBuilder.Entity("A1.Models.Endereco", b =>
                 {
                     b.HasOne("A1.Models.Usuario", "Usuario")
@@ -596,6 +758,25 @@ namespace A1.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("A1.Models.ItemIngrediente", b =>
+                {
+                    b.HasOne("A1.Models.Ingrediente", "Ingrediente")
+                        .WithMany("ItemIngredientes")
+                        .HasForeignKey("IngredienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("A1.Models.ItemCardapio", "ItemCardapio")
+                        .WithMany("ItemIngredientes")
+                        .HasForeignKey("ItemCardapioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingrediente");
+
+                    b.Navigation("ItemCardapio");
                 });
 
             modelBuilder.Entity("A1.Models.Pedido", b =>
@@ -660,21 +841,6 @@ namespace A1.Migrations
                         .IsRequired();
 
                     b.Navigation("ItemCardapio");
-                });
-
-            modelBuilder.Entity("IngredienteItemCardapio", b =>
-                {
-                    b.HasOne("A1.Models.Ingrediente", null)
-                        .WithMany()
-                        .HasForeignKey("IngredientesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("A1.Models.ItemCardapio", null)
-                        .WithMany()
-                        .HasForeignKey("ItensCardapioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -743,6 +909,16 @@ namespace A1.Migrations
                 {
                     b.Navigation("Pedido")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("A1.Models.Ingrediente", b =>
+                {
+                    b.Navigation("ItemIngredientes");
+                });
+
+            modelBuilder.Entity("A1.Models.ItemCardapio", b =>
+                {
+                    b.Navigation("ItemIngredientes");
                 });
 
             modelBuilder.Entity("A1.Models.Mesa", b =>

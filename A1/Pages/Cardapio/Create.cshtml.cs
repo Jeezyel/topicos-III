@@ -55,11 +55,9 @@ namespace A1.Pages.Cardapio
 
             foreach (var ingredienteVM in IngredientesOptions.Where(i => i.Selecionado))
             {
-                var ingrediente = await _context.Ingredientes.FindAsync(ingredienteVM.Id);
-                if (ingrediente != null)
-                {
-                    ItemCardapio.Ingredientes.Add(ingrediente);
-                }
+                // A única mudança é aqui. Em vez de adicionar o Ingrediente,
+                // adicionamos um novo objeto ItemIngrediente.
+                ItemCardapio.ItemIngredientes.Add(new ItemIngrediente { IngredienteId = ingredienteVM.Id });
             }
 
             await _context.SaveChangesAsync();

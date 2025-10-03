@@ -35,9 +35,12 @@ namespace A1.Pages.Cardapio
                 return NotFound();
             }
 
-            // Carrega o ItemCardapio, INCLUINDO a lista de Ingredientes já associados a ele.
+            // --- CORREÇÃO AQUI ---
+            // Carrega o ItemCardapio, incluindo a entidade de junção e, a partir dela, o Ingrediente.
             ItemCardapio = await _context.ItensCardapio
-                                 .Include(i => i.Ingredientes)
+                                 .Include(i => i.ItemIngredientes)
+                                 .ThenInclude(ii => ii.Ingrediente)
+                                 .AsNoTracking() // Boa prática para páginas de edição
                                  .FirstOrDefaultAsync(m => m.Id == id);
 
             if (ItemCardapio == null)
@@ -45,18 +48,16 @@ namespace A1.Pages.Cardapio
                 return NotFound();
             }
 
-            // Carrega a lista de TODOS os ingredientes do banco
             var todosIngredientes = await _context.Ingredientes.ToListAsync();
 
-            // Pega os IDs dos ingredientes que JÁ ESTÃO associados a este prato.
-            var ingredientesDoPratoIds = new HashSet<int>(ItemCardapio.Ingredientes.Select(i => i.Id));
+            // --- CORREÇÃO AQUI ---
+            // Pega os IDs dos ingredientes a partir da entidade de junção.
+            var ingredientesDoPratoIds = new HashSet<int>(ItemCardapio.ItemIngredientes.Select(ii => ii.IngredienteId));
 
-            // Cria a lista de ViewModels para os checkboxes
             IngredientesOptions = todosIngredientes.Select(ing => new IngredienteViewModel
             {
                 Id = ing.Id,
                 Nome = ing.Nome,
-                // Marca o checkbox como 'selecionado' se o ID do ingrediente estiver na lista de IDs do prato.
                 Selecionado = ingredientesDoPratoIds.Contains(ing.Id)
             }).ToList();
 
@@ -70,9 +71,10 @@ namespace A1.Pages.Cardapio
                 return Page();
             }
 
-            // Carrega o prato original do banco, incluindo seus ingredientes atuais.
+            // --- CORREÇÃO AQUI ---
+            // Carrega o prato original, incluindo a entidade de junção.
             var itemToUpdate = await _context.ItensCardapio
-                                     .Include(i => i.Ingredientes)
+                                     .Include(i => i.ItemIngredientes)
                                      .FirstOrDefaultAsync(i => i.Id == id);
 
             if (itemToUpdate == null)
@@ -80,13 +82,11 @@ namespace A1.Pages.Cardapio
                 return NotFound();
             }
 
-            // Atualiza as propriedades simples (Nome, Preço, etc.)
             if (await TryUpdateModelAsync<ItemCardapio>(
                 itemToUpdate,
-                "ItemCardapio", // Prefixo para os campos do formulário
+                "ItemCardapio",
                 i => i.Nome, i => i.Descricao, i => i.PrecoBase, i => i.Periodo))
             {
-                // Atualiza os ingredientes
                 UpdateItemIngredientes(itemToUpdate, IngredientesOptions);
                 await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");
@@ -95,33 +95,36 @@ namespace A1.Pages.Cardapio
             return Page();
         }
 
+        // Este método já estava correto na sua versão!
         private void UpdateItemIngredientes(ItemCardapio itemToUpdate, List<IngredienteViewModel> ingredientesOptions)
         {
-            // Pega os IDs dos checkboxes que foram selecionados na tela
-            var ingredientesSelecionadosIds = new HashSet<string>(
-                ingredientesOptions.Where(i => i.Selecionado).Select(i => i.Id.ToString())
+            if (ingredientesOptions == null) return;
+
+            var ingredientesSelecionadosIds = new HashSet<int>(
+                ingredientesOptions.Where(i => i.Selecionado).Select(i => i.Id)
             );
-            // Pega os IDs dos ingredientes que já estão associados ao prato no banco
-            var ingredientesAtuaisIds = new HashSet<int>(
-                itemToUpdate.Ingredientes.Select(i => i.Id)
+            var ingredientesAtuais = new HashSet<int>(
+                itemToUpdate.ItemIngredientes.Select(ii => ii.IngredienteId)
             );
 
             foreach (var ingrediente in _context.Ingredientes)
             {
-                // Se o checkbox foi marcado e o prato ainda não tem esse ingrediente, ADICIONA.
-                if (ingredientesSelecionadosIds.Contains(ingrediente.Id.ToString()))
+                if (ingredientesSelecionadosIds.Contains(ingrediente.Id))
                 {
-                    if (!ingredientesAtuaisIds.Contains(ingrediente.Id))
+                    if (!ingredientesAtuais.Contains(ingrediente.Id))
                     {
-                        itemToUpdate.Ingredientes.Add(ingrediente);
+                        itemToUpdate.ItemIngredientes.Add(new ItemIngrediente { ItemCardapioId = itemToUpdate.Id, IngredienteId = ingrediente.Id });
                     }
                 }
-                // Se o checkbox foi DESMARCADO e o prato tinha esse ingrediente, REMOVE.
                 else
                 {
-                    if (ingredientesAtuaisIds.Contains(ingrediente.Id))
+                    if (ingredientesAtuais.Contains(ingrediente.Id))
                     {
-                        itemToUpdate.Ingredientes.Remove(ingrediente);
+                        var itemIngredienteToRemove = itemToUpdate.ItemIngredientes.FirstOrDefault(ii => ii.IngredienteId == ingrediente.Id);
+                        if (itemIngredienteToRemove != null)
+                        {
+                            _context.Remove(itemIngredienteToRemove);
+                        }
                     }
                 }
             }

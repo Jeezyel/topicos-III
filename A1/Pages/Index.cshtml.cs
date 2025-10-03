@@ -2,7 +2,9 @@
 using A1.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging; // Adicionado para o ILogger
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace A1.Pages
@@ -15,8 +17,11 @@ namespace A1.Pages
         public ItemCardapio? SugestaoAlmoco { get; private set; }
         public ItemCardapio? SugestaoJantar { get; private set; }
 
-        public IndexModel(A1Context context)
+        // --- CONSTRUTOR CORRIGIDO ---
+        // Agora ele recebe tanto o ILogger quanto o A1Context
+        public IndexModel(ILogger<IndexModel> logger, A1Context context)
         {
+            _logger = logger;
             _context = context;
         }
 
@@ -37,5 +42,8 @@ namespace A1.Pages
                 .Select(s => s.ItemCardapio)
                 .FirstOrDefaultAsync();
         }
+
+        // --- MÉTODO OnGet() REMOVIDO ---
+        // O método duplicado foi apagado.
     }
 }

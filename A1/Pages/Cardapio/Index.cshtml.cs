@@ -24,7 +24,10 @@ namespace A1.Pages.Cardapio
         public async Task OnGetAsync()
         {
             ItensCardapio = await _context.ItensCardapio
-                                  .Include(item => item.Ingredientes)
+                                  // Incluímos a tabela de junção
+                                  .Include(item => item.ItemIngredientes)
+                                  // E a partir da junção, incluímos o Ingrediente
+                                  .ThenInclude(ii => ii.Ingrediente)
                                   .ToListAsync();
         }
     }
