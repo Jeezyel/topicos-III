@@ -38,7 +38,13 @@
                         }
                         @if (User.IsInRole("Admin"))
                         {
-                            // ... (seus links de admin aqui, se houver) ...
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Admin/ControlePerfil">Administração</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/User/Index">Gerenciamento de Usuario</a>
+                            </li>
                         }
                     </ul>
 

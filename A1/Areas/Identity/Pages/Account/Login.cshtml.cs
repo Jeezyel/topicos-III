@@ -109,38 +109,45 @@ namespace A1.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            // Define a URL de retorno (caso não fornecida, vai para a página principal)
             returnUrl ??= Url.Content("~/");
 
+            // Obtemos os logins externos (caso existam)
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                // Tentamos fazer o login com o email e senha fornecidos
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    // Redireciona para a página de retorno (ou página inicial)
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
+                    // Caso seja necessário 2FA, redireciona para a página de login com 2FA
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
+                    // Redireciona para a página de bloqueio caso a conta tenha sido bloqueada
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
+                    // Se o login falhou, adiciona um erro e mantém o usuário na mesma página de login
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
+                    return Page(); // Recarrega a página de login
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // Se o modelo não for válido, recarrega a página
             return Page();
         }
+
     }
 }

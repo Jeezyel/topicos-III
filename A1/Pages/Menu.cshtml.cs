@@ -1,5 +1,6 @@
 using A1.Data;
 using A1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace A1.Pages
 {
+    [Authorize]
     public class MenuModel : PageModel
     {
         private readonly A1Context _context;
