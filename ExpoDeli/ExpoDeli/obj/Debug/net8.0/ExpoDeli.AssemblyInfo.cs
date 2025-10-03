@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ExpoDeli")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec8dca4fd567dda4533582fd48d704ca8c2e83d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41ec9e56981fbdf291cf4cb88f5f6a948862c2ea")]
 [assembly: System.Reflection.AssemblyProductAttribute("ExpoDeli")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ExpoDeli")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -6,10 +6,15 @@
 }
 
 <h1>Index</h1>
+@if (User.IsInRole("Admin"))
+{
+
+<p>Bem-vindo, administrador! Você tem acesso total ao sistema.</p>
 
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -31,32 +36,35 @@
     <tbody>
         @foreach (var item in Model.ItensCardapio)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nome)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrecoBase)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Periodo)
-                </td>
-                <td>
-                    @if (item.ItemIngredientes != null && item.ItemIngredientes.Any())
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrecoBase)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Periodo)
+            </td>
+            <td>
+                @if (item.ItemIngredientes != null && item.ItemIngredientes.Any())
                     {
-                        @string.Join(", ", item.ItemIngredientes.Select(ii => ii.Ingrediente.Nome))
+                @string.Join(", ", item.ItemIngredientes.Select(ii => ii.Ingrediente.Nome))
                     }
                     else
                     {
-                        <span>Nenhum</span>
+                <span>Nenhum</span>
                     }
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+            </td>
+            @if (User.IsInRole("Admin"))
+{
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+            }
+        </tr>
         }
     </tbody>
 </table>

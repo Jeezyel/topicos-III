@@ -43,7 +43,5 @@ namespace A1.Pages
                 .FirstOrDefaultAsync();
         }
 
-        // --- MÉTODO OnGet() REMOVIDO ---
-        // O método duplicado foi apagado.
     }
 }
